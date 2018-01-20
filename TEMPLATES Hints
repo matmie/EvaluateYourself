@@ -1,0 +1,106 @@
+1) Klasy validacji
+    ng-untouched - klasa nadawana komponentowi w chwili utworzenia, kiedy element nie był jeszcze ruszany.
+    ng-touched - wystarczy tylko wejść na to pole i z niego zejśc, żeby była nadana ta klasa. 
+                Nastąpiła interakcja, ale ta klasa zostanie nadana dopiero po tym jak element straci focus.
+                Podczas zmiany wartości nie będzie nadawana ta klasa. Dopiero jak zejdziemy z elementu, to klasa się pojawi.
+    ng-pristnie - oznacza, że nie było nic zmieniane w elemencie.
+    ng-dirty - jeżeli użytkownik coś zmienił to bedzie nadawana ta klasa.
+    ng-valid - klasa nadawana kiedy wartość elementu jest poprawna.
+    ng-invalid - kiedy wartośc elementu jest nieprawidłowa.
+
+2) Propertisy ngModel dla validacji - używanie do warunków na formie i w kodzie ts
+    Invalid: {{ firstName.invalid }} <!-- Tak dostajemy się do atrybutów modelu ngModel ale dopiero, kidy zrobimy przypisanie 
+                                         #firstName="ngModel" -->
+    Valid: {{ firstName.valid }} 
+    Touched: {{ firstName.touched }}
+    Untouched: {{ firstName.untouched }}
+    Pristine: {{ firstName.pristine }}
+    Dirty: {{ firstName.dirty }}
+
+3) Binding klasy
+    [class.nazwaKlasy]="wyrażenieBool" - nadawanie klasy do taga html-owego
+4) Binding atrybutów
+    [attr.aria-label]="wartosc"
+    [src]="wartosc" - <img [src(atrybut html-owy)]="wartosc z komponentu"
+    [hidden]="!event?.location"
+5) Ustawienie CSS-a eventem
+    [style.color]="color"
+    (mouseenter)="color = '#EE0'" - nie koniecznie trzeba wywoływać funkcje. Można ustawić od razu właściwośc w komponencie.
+    (click)="doSth()" - binding eventu wywołuje metode z komponentu
+6) Two-way binding
+    <input [(ngModel)]="character.name">
+7) Directives
+    [ngClass]="{active: isActive, color: myColor}" 
+              ex. <div [ngClass]="{green:event?.time === '8:00 am', bold:event?.time === '8:00 am'}"></div>
+              ex. Wywołanie metody jeżeli logika jest zawiła <div [ngClass]="getStartTimeClass()"></div>
+                        getStartTimeClass() {
+                            const isEarlyStart = this.event && this.event.time === '8:00 am';
+                            return {green: isEarlyStart, bold: isEarlyStart}; - zwracamy obiekt albo
+                            return 'green bold' jeżeli isEarlyStart === true; w p.p. return '' albo
+                            return ['green','bold'] jezeli isEarlyStart === true; w p.p. return [] 
+                        }
+              ex. <div class="well" [ngClass]="{green:event?.time === '8:00 am', bold:event?.time === '8:00 am'}"></div>
+                  Może być użyte class bo wszystkie klasy z dyrektywy ngClass będą dodane do classList obiektu
+    [ngStyle]="{color: colorPreference}"
+              ex. <div [ngStyle]="{'color':event?.time === '8:00 am' ? '#003300' : '#bbb', 
+                                   'font-weight': event?.time === '8:00 am' ? 'bold' : 'normal'}">
+              ex. <div [ngStyle]="getStartTimeStyle">
+                       getStartTimeStyle():any {
+                           if(this.event && this.event.time === '8:00 am'){
+                               return {color:'#003300','font-weight':'bold'}
+                           }
+                           return {}
+                       } 
+    [style.color]="colorPreference"
+    *ngFor(ex. *ngFor="let character of characters, let i = index") --> i to lokalna zmienna przechowująca index w tablicy
+           ex2. <event-thumbnail *ngFor="let event of events" [event]="event"></event-thumbnail>
+    *ngIf(ex. *ngIf="currenVehicle")
+          ex. <div *ngIf="event?.location"> - czy event jest zainicjalizowany i czy jest tam właściwośc location
+    *ngSwitch(ex <div [ngSwitch]="event?.time">
+                    <span *ngSwitchCase="'8:00 am'">Early Start</span>
+                    <span *ngSwitchCase="'10:00 am'">Late Start</span> 
+                    <span *ngSwitchDefault>Normal Start</span>
+                 </div>)
+    ex. <form #loginForm="ngForm" (ngSubmit)="login(loginForm.value)"> - przypisanie metody login jako reakcji na submit formularza #loginForm
+8) Pipes
+   <p>{{eventDate | date:'medium'}}</p>
+   <p>{{eventDate | date:'yMMMd'}}</p> --> Więcej w dokumentacji
+   <p>{{price | currency}}</p>
+   <p>{{price | percent:'1.1-1'}}</p>
+   <p>{{price | number:'1.1-3'}}</p> --> '1.1-3' tzn minCyfrPrzedKropką.minCyfrPoKropce-maxCyfrPoKropce          
+
+9) Przekazywanie danych do komponentu podrzędnego oraz przekazywanie danych z komponentu podrzędnego do komponentu nadrzędnego
+
+   EX: <event-thumbnail [event]="event1" (eventClick)="handleEventClicked($event)"></event-thumbnail>  
+   [event]="event1" - event to obiekt zdefiniowany w komponencie podrzędnym jako Input() event:IEvent, 
+                      natomiast event1 to obiekt przekazywany z komponentu nadrzędnego.
+   
+   (eventClick)="handleEventClicked($event)" = eventClick jest zdefiniowany w komponencie podrzędnym jako
+                                               @Output() eventClick = new EventEmitter() który emituje dane wartosc 
+                                               oparciu o jakieś zdarzenie w komponencie this.eventClick.emit(dane)
+                                               natomiast handleEventClicked($event) to metoda w komponencie nadrzędnym 
+                                               obsługująca dane z komponentu podrzędnego. Pod $event są dane z funkcji emit.
+
+10) Jak dostać sie do danych komponentu podrzędnego?
+
+    EX: <event-thumbnail #thumbnail [event]="event1"></event-thumbnail>
+    <h3>{{thumbnail.someProperty}}</h3> - dostanie się do właściowości publicznej komponentu podrzędnego.
+    <button class="btn btn-primary" (click)="thumbnail.logFoo()">Log some foo</button>
+
+    Na powyższym przykładzie widać w jaki sposób dostać sie do metody logFoo() komponentu podrzędnego.
+
+11) Sprawdzanie danych czy są prawidłowo zainicjalizowane
+
+    {{event?.location.address}} - zabezpieczamy się przed niezaincjaliowanym obiektem event, ale zakładamy, że location jest zawsze zainicjalizowany
+    {{event?.location?.address}} - zabezpieczamy się przed wszystkim
+
+12) Routing od strony template
+
+    Odwołujemy się poprzez routerLink ex. <a [routerLink]="['/events', event.id]"> gdzie "'/events'" to ścieżka routingu
+                                                                                   a event.id to id obiektu przpisywanego do 
+                                                                                   id w ścieżce routingu "/events/:id"
+
+    Dodatkowo jeżeli chcemy zaznaczyć aktywny link to robimy <a [routerLink]="['/events', event.id]" routerLinkActive="active"> gdzie active to klasa css
+                                                                                                                       np li > a.active {color: #F97924; }   
+    efektem będzie kolorowanie linku, który pasuje do ścieżki więc jeżeli mamy dwa linki /events i /events/new to oba będą pokolorowane bo pasują do wzorca, żeby tego uniknąć
+    dodajemy <a [routerLink]="['/events', event.id]" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">                                                                                                                                               
