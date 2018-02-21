@@ -1,0 +1,48 @@
+[
+    {
+        firstName: "Mateusz",
+        lastName: "Miernik",
+        role: {
+            roleId : 0,
+            roleDisplayName: "Administrator"
+        },
+        userId: 0 
+    },
+    {
+        firstName: "Mirosław",
+        lastName: "Zwykły",
+        role: {
+            roleId : 2,
+            roleDisplayName: "Użytkownik"
+        },
+        userId: 0 
+    },
+    {
+        firstName: "Zenobiusz",
+        lastName: "Czerny",
+        role: {
+            roleId : 1,
+            roleDisplayName: "Użytkownik-Opiekun"
+        },
+        userId: 0 
+    },
+    {
+        firstName: "Łukasz",
+        lastName: "Szukasz",
+        role: {
+            roleId : 2,
+            roleDisplayName: "Użytkownik"
+        },
+        userId: 0 
+    },
+    {
+        firstName: "Piotr",
+        lastName: "Łotr",
+        role: {
+            roleId : 2,
+            roleDisplayName: "Użytkownik"
+        },
+        userId: 0 
+    }
+
+]

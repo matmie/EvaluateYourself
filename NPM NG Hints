@@ -45,7 +45,7 @@ Opcja:
  --dry-run (alias -d)--> Pokazuje jakie pliki zostaną wygenerowane, ale bez zapisu ich na dysk.
  --inline-template (alias -it) --> Czy załączyć treść html inline-owo w pliku komponentu.
  --inline-style (alias -is) --> Czy załączyć treść css/less/scss w pliku komponentu.
- --spec true/false --> Czy ma zosać wygenerowany plik SPEC opisujący testy na komponencie.
+ --spec true/false --> Czy ma zosać wygenerowany plik SPEC opisujący testy na komponencie. Można użyć --no-spec, żeby nie generować pliku do testów.
  --prefix nazwa --> Możemy zmienić prefix dla komponentu.
  --view-encapsulation NAZWA(Emulated) (alias -vc) --> Narazie nie wiem co to znaczy //TODO 
  --change-detection NAZWA(OnPush) (alias -cd) --> Narazie nie wiem co to znaczy //TODO
