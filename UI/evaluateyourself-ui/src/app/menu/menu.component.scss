@@ -1,0 +1,21 @@
+$iconWidth: 26px;
+mat-toolbar {
+    height: 50px;
+}
+
+.mat-icon {
+    height: $iconWidth;
+    width: $iconWidth;
+    line-height: $iconWidth;
+    color: white;
+    font-size:17px;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
+}
+.mat-menu-item{
+    height:30px;
+    font-size:17px;
+    line-height: 20px;
+}

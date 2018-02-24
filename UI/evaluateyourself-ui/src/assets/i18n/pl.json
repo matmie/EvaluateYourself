@@ -1,0 +1,33 @@
+{
+    "shared": {
+        "cancel": "Anuluj",
+        "apply": "Zaloguj"
+    },
+    "menu": {
+        "tools": "Narzędzia",
+        "emotiondiary": "Dzienniczek uczuć",
+        "moodchart": "Diagram nastroju",
+        "habbitseliminator": "Eliminator nawyków",
+        "login": "Zaloguj",
+        "logout": "Wyloguj",
+        "register": "Zarejestruj",
+        "about": "O mnie"
+    },
+    "login": {
+        "header": "Logowanie",
+        "email": {
+            "label": "Adres email",
+            "errors": {
+                "pattern": "Proszę podać właściwy format adresu email",
+                "required": "Pole wymagane"
+            }
+        },
+        "password": {
+            "label": "Hasło",
+            "errors": {
+                "required": "Pole wymagane"
+            }
+        },
+        "failed": "Niepoprawny adres e-mail lub hasło"
+    }
+}

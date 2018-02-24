@@ -1,48 +1,57 @@
 [
     {
-        firstName: "Mateusz",
-        lastName: "Miernik",
-        role: {
-            roleId : 0,
-            roleDisplayName: "Administrator"
+        "firstName": "Mateusz",
+        "lastName": "Miernik",
+        "role": {
+            "roleId": 0,
+            "roleDisplayName": "Administrator"
         },
-        userId: 0 
+        "userId": 0,
+        "email": "test@test.pl",
+        "password": "test@test.pl"
     },
     {
-        firstName: "Mirosław",
-        lastName: "Zwykły",
-        role: {
-            roleId : 2,
-            roleDisplayName: "Użytkownik"
+        "firstName": "Mirosław",
+        "lastName": "Zwykły",
+        "role": {
+            "roleId": 2,
+            "roleDisplayName": "Użytkownik"
         },
-        userId: 0 
+        "userId": 1,
+        "email": "test1@test.pl",
+        "password": "test1@test.pl"
     },
     {
-        firstName: "Zenobiusz",
-        lastName: "Czerny",
-        role: {
-            roleId : 1,
-            roleDisplayName: "Użytkownik-Opiekun"
+        "firstName": "Zenobiusz",
+        "lastName": "Czerny",
+        "role": {
+            "roleId": 1,
+            "roleDisplayName": "Użytkownik-Opiekun"
         },
-        userId: 0 
+        "userId": 2,
+        "email": "test2@test.pl",
+        "password": "test2@test.pl"
     },
     {
-        firstName: "Łukasz",
-        lastName: "Szukasz",
-        role: {
-            roleId : 2,
-            roleDisplayName: "Użytkownik"
+        "firstName": "Łukasz",
+        "lastName": "Szukasz",
+        "role": {
+            "roleId": 2,
+            "roleDisplayName": "Użytkownik"
         },
-        userId: 0 
+        "userId": 3,
+        "email": "test3@test.pl",
+        "password": "test3@test.pl"
     },
     {
-        firstName: "Piotr",
-        lastName: "Łotr",
-        role: {
-            roleId : 2,
-            roleDisplayName: "Użytkownik"
+        "firstName": "Piotr",
+        "lastName": "Łotr",
+        "role": {
+            "roleId": 2,
+            "roleDisplayName": "Użytkownik"
         },
-        userId: 0 
+        "userId": 4,
+        "email": "test4@test.pl",
+        "password": "test4@test.pl"
     }
-
 ]

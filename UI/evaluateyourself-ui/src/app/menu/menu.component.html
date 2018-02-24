@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">
+    <span>Logo Here</span>
+    <span class="example-spacer"></span>
+    <button mat-button [matMenuTriggerFor]="toolsMenu">
+        <mat-icon>build</mat-icon>{{ "menu.tools" | translate }}
+    </button>
+    <button mat-button>{{ "menu.about" | translate }}</button>
+    <button mat-icon-button></button>
+    <button *ngIf="!isAuthenticated()" mat-button [routerLink]="['/register']">{{"menu.register" | translate}}</button>
+    <button *ngIf="!isAuthenticated()" mat-button (click)="openLoginDialog()">{{"menu.login" | translate}}</button>
+    <button *ngIf="isAuthenticated()" mat-button (click)="logout()">{{"menu.logout" | translate}}</button>
+    <mat-menu #toolsMenu="matMenu">
+        <button mat-menu-item [routerLink]="['/emotionsdiary']">
+            <mat-icon>list</mat-icon>{{ "menu.emotiondiary" | translate }}</button>
+        <button mat-menu-item>
+            <mat-icon>trending_up</mat-icon>{{ "menu.moodchart" | translate }}</button>
+        <button mat-menu-item>
+            <mat-icon>smoke_free</mat-icon>{{ "menu.habbitseliminator" | translate }}</button>
+    </mat-menu>
+
+</mat-toolbar>
