@@ -104,3 +104,30 @@
                                                                                                                        np li > a.active {color: #F97924; }   
     efektem będzie kolorowanie linku, który pasuje do ścieżki więc jeżeli mamy dwa linki /events i /events/new to oba będą pokolorowane bo pasują do wzorca, żeby tego uniknąć
     dodajemy <a [routerLink]="['/events', event.id]" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">                                                                                                                                               
+
+
+
+REACTIVE FORMS - Po stronie template
+
+1) [formGroup]="signupForm" w komponencie form - w ten sposób łączymy się z modelem zdefiniowanym w komponencie.
+2) formControlName="firstName" w inputach - w ten sposób tworzymy odniesienie do modelu definiowanego w komponencie.
+
+
+REACTIVE FORMS - FormBuilder
+EX:
+    this.customerForm = this.fb.group({ //Najprostsza forma 
+        firstName: '',
+        sendCatalog: true //Wartość w tym przypadku checkbox-a
+    });
+EX2
+    this.customerForm = this.fb.group({
+        firstName: {value: 'n/a', disabled: true}, //Można definować każdą kontrolkę jako obiekt, tutaj widać, że definiujemy atrybut disabled = true
+        sendCatalog: {value: true, disabled: false}
+    });
+EX3
+    this.customerForm = this.fb.group({ //Definowanie jako tablica
+        firstName: [''],
+        sendCatalog: [{value: true, disabled: false}]
+    });
+EX4
+    

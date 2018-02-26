@@ -3,8 +3,8 @@ import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { FormControl, Validators, NgModel, FormGroup, FormBuilder } from '@angular/forms';
 
 import { AuthService } from '../shared/services/auth.service';
-import { IUser, User } from '../shared/model/user';
 import { ValidatorsPatterns } from '../shared/utils/validators-patterns';
+import { User } from '../shared/model/user';
 
 
 @Component({
@@ -13,25 +13,28 @@ import { ValidatorsPatterns } from '../shared/utils/validators-patterns';
     styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-    loginForm: FormGroup;
-    user: IUser = null;
-    loginFailed: boolean = false;
 
-    //FormControls
+    private loginForm: FormGroup;
+    private passwordFormControl: FormControl;
+    private emailFormControl: FormControl;
 
+    private loginFailed: boolean = false;
+
+    private user: User;
 
     constructor(private _dialogRef: MatDialogRef<LoginComponent>, private _authService: AuthService, private _formBuilder: FormBuilder) { }
 
-    ngOnInit() {
-        this.user = new User();
+    ngOnInit(): void {
+        this.passwordFormControl = new FormControl('', Validators.required);
+        this.emailFormControl = new FormControl('', [Validators.required, Validators.pattern(ValidatorsPatterns.EMAIL_REGEX)]);
         this.loginForm = this._formBuilder.group({
-            passwordFormControl: ['', Validators.required],
-            emailFormControl: ['', [Validators.required, Validators.pattern(ValidatorsPatterns.EMAIL_REGEX)]]
+            passwordFormControl: this.passwordFormControl,
+            emailFormControl: this.emailFormControl
         });
     }
 
     login(): void {
-        this._authService.login(this.user.email, this.user.password).subscribe(user => {
+        this._authService.login(this.emailFormControl.value, this.passwordFormControl.value).subscribe(user => {
             this._dialogRef.close(user);
         }, error => {
             this.loginFailed = true;
@@ -43,6 +46,6 @@ export class LoginComponent implements OnInit {
     }
 
     getErrorMessage(): string {
-        return "Brak obsługi błedów";
+        return "TODO:Brak obsługi błedów";
     }
 }

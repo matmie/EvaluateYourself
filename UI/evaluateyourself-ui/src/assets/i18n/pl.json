@@ -28,6 +28,15 @@
                 "required": "Pole wymagane"
             }
         },
-        "failed": "Niepoprawny adres e-mail lub hasło"
+        "failed": "Niepoprawny adres e-mail lub hasło",
+        "afterLogInSuccess": "Nastąpiło udane logowanie do systemu",
+        "afterLogOutSuccess": "Nastąpiło udane wylogowanie z systemu"
+    },
+    "register": {
+        "header": "Formularz rejestracji użytkownika",
+        "afterRegisterSuccess": "Proces dodania użytkownika zakończony powodzeniem",
+        "passwordConfirm": {
+            "label": "Powtórz hasło"
+        }
     }
 }

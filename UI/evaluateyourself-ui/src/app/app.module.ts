@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MaterialModule } from './shared/material.module';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'; //Moduł do translacji opisów w szablonach stron
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 //Components
@@ -17,6 +17,7 @@ import { LoginComponent } from './login/login.component';
 
 //Providers
 import { AuthService } from './shared/services/auth.service';
+import { RegisterComponent } from './register/register.component';
 
 
 // AoT requires an exported function for factories
@@ -29,7 +30,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         AppComponent,
         MenuComponent,
         NewsComponent,
-        LoginComponent
+        LoginComponent,
+        RegisterComponent
     ],
     imports: [
         BrowserModule,
@@ -44,13 +46,13 @@ export function HttpLoaderFactory(http: HttpClient) {
         }),
         AppRoutingModule,
         MaterialModule,
-        FormsModule,
         ReactiveFormsModule
     ],
     providers: [AuthService],
     bootstrap: [AppComponent],
     entryComponents: [
-        LoginComponent
+        LoginComponent,
+        RegisterComponent
     ]
 })
 export class AppModule { }

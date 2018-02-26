@@ -6,7 +6,7 @@
     </button>
     <button mat-button>{{ "menu.about" | translate }}</button>
     <button mat-icon-button></button>
-    <button *ngIf="!isAuthenticated()" mat-button [routerLink]="['/register']">{{"menu.register" | translate}}</button>
+    <button *ngIf="!isAuthenticated()" mat-button (click)="openRegisterDialog()">{{"menu.register" | translate}}</button>
     <button *ngIf="!isAuthenticated()" mat-button (click)="openLoginDialog()">{{"menu.login" | translate}}</button>
     <button *ngIf="isAuthenticated()" mat-button (click)="logout()">{{"menu.logout" | translate}}</button>
     <mat-menu #toolsMenu="matMenu">

@@ -31,14 +31,14 @@ export class AuthService {
                 }
                 else {
                     this._currentUser = data;
-                    console.log("Zalogowany użytkownik:", this._currentUser, data);
                 }
             });
     }
 
-    logout(): EmptyObservable<boolean> {
-        this._currentUser = null;
-        return new EmptyObservable();
+    logout(): Observable<IUser[]> {
+        return this.getUsers().do(data => {
+            this._currentUser = null;
+        });
     }
 
     isAuthenticated(): boolean {
