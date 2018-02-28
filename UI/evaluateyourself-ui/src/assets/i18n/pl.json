@@ -37,6 +37,10 @@
         "afterRegisterSuccess": "Proces dodania użytkownika zakończony powodzeniem",
         "passwordConfirm": {
             "label": "Powtórz hasło"
+        },
+        "fullData": {
+            "info": "Możesz już teraz podać więcej informacji o sobie",
+            "expandButtonLabel": "Wprowadź dane dodatkowe"
         }
     }
 }

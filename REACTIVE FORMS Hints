@@ -1,0 +1,125 @@
+REACTIVE FORMS - Po stronie template
+
+1) [formGroup]="signupForm" w komponencie form - w ten sposób łączymy się z modelem zdefiniowanym w komponencie.
+2) formControlName="firstName" w inputach - w ten sposób tworzymy odniesienie do modelu definiowanego w komponencie.
+3) formGroupName="name" - w tens posób definiujemy grupę elementów. 
+    EX
+    <div formGroupName="availability">
+        <input formControlName="start" />
+        <input formControlName="stop" />
+    </div>
+
+
+REACTIVE FORMS - FormBuilder
+
+1) FormBuilder
+EX:
+    this.customerForm = this.fb.group({ //Najprostsza forma 
+        firstName: '',
+        sendCatalog: true //Wartość w tym przypadku checkbox-a
+    });
+EX2
+    this.customerForm = this.fb.group({
+        firstName: {value: 'n/a', disabled: true}, //Można definować każdą kontrolkę jako obiekt, tutaj widać, że definiujemy atrybut disabled = true
+        sendCatalog: {value: true, disabled: false}
+    });
+EX3
+    this.customerForm = this.fb.group({ //Definowanie jako tablica
+        firstName: [''],
+        sendCatalog: [{value: true, disabled: false}]
+    });
+
+2) Walidacje
+EX1 Jeden walidator
+
+    this.customerForm = this.fb.group({ //Definowanie jako tablica
+        firstName: ['', Validators.required],
+        sendCatalog: true
+    });
+
+EX2 Wiele walidatorów
+
+    this.customerForm = this.fb.group({ //Definowanie jako tablica
+        firstName: ['', [Validators.required, Validators.minLength(3)], server-side-validators],
+        sendCatalog: true
+    });
+
+EX3 Zmina walidacji na kontrolce, jeżeli zachodzą inne warunki
+
+    myControl.setValidators(Validators.required);
+    myControl.setValidators([Validators.required, Validators.maxLength(30)]);
+    myControl.clearValidators();
+    myControl.updateValueAndValidity(); //Update po zmianie reguł walidacyjnych
+
+EX4 Własne Walidacje RatingValidation - prosty walidator bez parametrów
+
+    function ratingRange(c: AbstractControl): {[key: string]: boolean} | null {
+        if(c.value != undefined && (isNaN(c.value) || c.value < 1 || c.value > 5)){
+            return {'range': true}; //range nazwa reguły walidacyjnej
+        };
+        return null;
+    }
+
+    Dodanie walidatora
+
+    this.customerForm = this.fb.group({ //Definowanie jako tablica
+        firstName: ['', Validators.required],
+        rating:['',ratingRange],
+        sendCatalog: true
+    });
+
+    W template jeżeli chcemy się odnieść do nazwy walidatora, czy wystąpiły problemy to odnosimy się do nazwy range, która jest w zwrotce z walidatora.
+
+EX4 Wlasne Walidacje - walidator z parametrami
+
+function ratingRange(min:number,max:nymber): ValidatorFn { //Zwracamy funkcje
+    return (c: AbstractControl): {[key: string]: boolean} | null => {
+        if(c.value != undefined && (isNaN(c.value) || c.value < min || c.value > max)){
+            return {'range': true}; //range nazwa reguły walidacyjnej
+        };
+        return null;
+    };
+
+    Dodanie walidatora
+
+    this.customerForm = this.fb.group({ //Definowanie jako tablica
+        firstName: ['', Validators.required],
+        rating:['',ratingRange(1,5)],
+        sendCatalog: true
+    });
+}
+
+EX5 Walidacja na wielu kotrolkach - porównywanie dwóch dat.
+
+    //Określenie grupy 
+    this.customerForm = this.fb.group({ //Definowanie jako tablica
+        firstName: ['', [Validators.required, Validators.minLength(3)], server-side-validators],
+        lastName: ['', [Validators.required, Validators.maxLength(50)], server-side-validators],
+        availability: this.fb.group({
+            start: ['',Validators.required],
+            end: ['', Validators.required]
+        },{validator: dateCompare}), //Tak się dodaje walidator do grupy
+        sendCatalog: true
+    });
+
+    W template:
+
+    <div formGroupName="availability">
+        <input formControlName="start" />
+        <input formControlName="stop" />
+    </div>
+
+    Cross-field validation - tworzymy nowy walidator
+    function dateCompare(c:AbstractControl): {[key:string]: boolean} | null {
+        let startControl = c.get('start');
+        let endControl = c.get('end');
+        if(startControl.pristine || endControl.pristine){
+            return null;
+        }
+        if(startControl.value !== endControl.value){
+            return {'match': true};
+        }
+        return null;
+    }
+
+ 

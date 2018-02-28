@@ -1,0 +1,21 @@
+.register-container {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+}
+
+.register-container mat-form-field:nth-child(2) {
+    margin-top: 10px;
+}
+
+.register-container #error_from_server {
+    font-size: 75%;
+    text-align: center;
+}
+
+mat-dialog-actions {
+    justify-content: center;
+}

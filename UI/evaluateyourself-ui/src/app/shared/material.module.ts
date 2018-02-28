@@ -3,7 +3,7 @@ import {
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
-    MatCheckboxModule,  
+    MatCheckboxModule,
     MatToolbarModule,
     MatTooltipModule,
     MatCardModule,
@@ -106,7 +106,6 @@ import { CdkTableModule } from '@angular/cdk/table';
         CdkTableModule
     ]
 })
-export class MaterialModule
-{
+export class MaterialModule {
 
 }

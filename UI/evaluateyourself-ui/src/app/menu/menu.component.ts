@@ -20,7 +20,7 @@ export class MenuComponent implements OnInit {
     }
 
     openLoginDialog(): void {
-        let dialogRef = this._dialog.open(LoginComponent, { width: '300px', disableClose: true });
+        let dialogRef = this._dialog.open(LoginComponent, { width: '400px', disableClose: true });
         dialogRef.afterClosed().subscribe(
             result => {
                 if (result) {
@@ -34,7 +34,7 @@ export class MenuComponent implements OnInit {
     }
 
     openRegisterDialog(): void {
-        let dialogRef = this._dialog.open(RegisterComponent, { width: '300px', disableClose: true });
+        let dialogRef = this._dialog.open(RegisterComponent, { width: '400px', disableClose: true });
         dialogRef.afterClosed().subscribe(
             result => {
                 if (result) {

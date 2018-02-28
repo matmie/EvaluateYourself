@@ -15,6 +15,13 @@
                 <input type="password" matInput [placeholder]="'register.passwordConfirm.label' | translate" formControlName="passwordConfirmationFormControl">
                 <mat-error *ngIf="passwordConfirmationFormControl.errors?.required && passwordConfirmationFormControl.touched">{{'login.password.errors.required' | translate}}</mat-error>
             </mat-form-field>
+
+            <button mat-button color="primary">
+                <span matTooltip="{{'register.fullData.info' | translate}}" matTooltipPosition="above">
+                    {{'register.fullData.expandButtonLabel' | translate}}
+                </span>
+            </button>
+
         </div>
     </mat-dialog-content>
     <mat-dialog-actions>
