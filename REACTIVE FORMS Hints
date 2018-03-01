@@ -2,7 +2,7 @@ REACTIVE FORMS - Po stronie template
 
 1) [formGroup]="signupForm" w komponencie form - w ten sposób łączymy się z modelem zdefiniowanym w komponencie.
 2) formControlName="firstName" w inputach - w ten sposób tworzymy odniesienie do modelu definiowanego w komponencie.
-3) formGroupName="name" - w tens posób definiujemy grupę elementów. 
+3) formGroupName="name" - w ten sposób definiujemy grupę elementów. 
     EX
     <div formGroupName="availability">
         <input formControlName="start" />
@@ -18,6 +18,14 @@ EX:
         firstName: '',
         sendCatalog: true //Wartość w tym przypadku checkbox-a
     });
+
+    Korzyści ze stosowania grup:
+    a) przekazywanie danych z modelu formy do modelu danych - odwzorowanie.
+    b) sprawdzanie touched, dirdy, valid dla grupy.
+    c) obserwowanie zmian i reakcja na nie.
+    d) walidacja cross-fields.
+    e) dynamiczna duplikacja grup.(Dalej w tym dokumencie)
+
 EX2
     this.customerForm = this.fb.group({
         firstName: {value: 'n/a', disabled: true}, //Można definować każdą kontrolkę jako obiekt, tutaj widać, że definiujemy atrybut disabled = true
@@ -122,4 +130,207 @@ EX5 Walidacja na wielu kotrolkach - porównywanie dwóch dat.
         return null;
     }
 
- 
+6 Reakcje na zmiany
+
+    this.myFormControl.valueChanges.subscribe(value => console.log(value));
+
+    this.myFormGroup.valueChanges.subscribe(value => console.log(JSON.stringify(value)))
+
+7 Zarządzanie funkcjami walidacyjnymi
+
+    setMessage(c:AbstarctControl):void{
+        this.emailMessage = '';
+        if((c.touched || c.dirty) && c.errors){
+            this.emailMessage = Object.keys(c.errors).map(Key => this.validationMessages[key]).join('');
+        }
+    }
+
+8 Opóźnienia z walidacją tzw. Reactive transformations
+
+    a) debounceTime
+    Uzytkownik wprowadza a->b->c->@->a->b->.->p->l--------------------------------->walidacja. Celowe opóźnienie walidacji, żeby użytkownik nie irytował się wyskakującymi komunikatami
+                                                        debounceTime(np 1000ms)
+
+    W kodzie 
+
+    import 'rxjs/add/operator/debounceTime';
+    emailControl.valueChanges.debounceTime(1000).subscribe(...);                                                        
+
+    b) ThrottleTime
+    c) distinctUntilChanged
+    d) inne                                                        
+
+ 9) Dynamiczne dodawnie elementów do formy. Duplikacja. Procedura:
+
+    a) Definiowanie elementów do duplikacji
+
+        this.customerForm = this.fb.group({ //Definowanie jako tablica
+            firstName: ['', [Validators.required, Validators.minLength(3)], server-side-validators],
+            lastName: ['', [Validators.required, Validators.maxLength(50)], server-side-validators],
+            availability: this.fb.group({
+                start: ['',Validators.required],
+                end: ['', Validators.required]
+            },{validator: dateCompare}), //Tak się dodaje walidator do grupy
+            sendCatalog: true,
+            addressType: 'home',
+            street1: '',
+            street2: '',
+            city: '',
+            state: '',
+            zip: ''
+        });
+
+    b) Elementy są zawierane do formGroup
+
+        this.customerForm = this.fb.group({ //Definowanie jako tablica
+            firstName: ['', [Validators.required, Validators.minLength(3)], server-side-validators],
+            lastName: ['', [Validators.required, Validators.maxLength(50)], server-side-validators],
+            availability: this.fb.group({
+                start: ['',Validators.required],
+                end: ['', Validators.required]
+            },{validator: dateCompare}), //Tak się dodaje walidator do grupy
+            sendCatalog: true,
+            addresses: this.fb.group({
+                addressType: 'home',
+                street1: '',
+                street2: '',
+                city: '',
+                state: '',
+                zip: ''
+            })
+        });
+
+        W tamplate dodajemy div, który zawiera te Elementy
+        <div formGroupName="addresses">
+        ...
+        </div>
+
+    c) Budoanie bloku
+
+        buildAddress(): FormGroup{ //Funkcja do budowania bloku
+            return this.fb.group({
+                addressType: 'home',
+                street1: '',
+                street2: '',
+                city: '',
+                state: '',
+                zip: ''
+            });
+        };
+
+        this.customerForm = this.fb.group({ //Definowanie jako tablica
+            firstName: ['', [Validators.required, Validators.minLength(3)], server-side-validators],
+            lastName: ['', [Validators.required, Validators.maxLength(50)], server-side-validators],
+            availability: this.fb.group({
+                start: ['',Validators.required],
+                end: ['', Validators.required]
+            },{validator: dateCompare}), //Tak się dodaje walidator do grupy
+            sendCatalog: true,
+            addresses: this.buildAddress() //Zmiana
+        });
+    
+    d) Tworzenie FormArray
+
+        this.myArray = new FormArray([...]);   lub this.myArray = this.fb.array([...]);
+
+        this.customerForm = this.fb.group({ //Definowanie jako tablica
+            firstName: ['', [Validators.required, Validators.minLength(3)], server-side-validators],
+            lastName: ['', [Validators.required, Validators.maxLength(50)], server-side-validators],
+            availability: this.fb.group({
+                start: ['',Validators.required],
+                end: ['', Validators.required]
+            },{validator: dateCompare}), //Tak się dodaje walidator do grupy
+            sendCatalog: true,
+            addresses: this.fb.array([this.buildAddress()]) //Zmiana
+        });
+
+        Od razu definiujemy getter dla adresów
+
+        get addresses(): FormArray {
+            return <FormArray> this.customerForm.get('addresses');
+        }
+
+        W template
+
+        <div formArrayName = "addresses">
+            <div formGroupName="0"> //Pierwszy element oznaczamy jako 0
+            </div>
+        </div>
+
+    e) Przejście Loop przez FormArry w HTML-u
+
+        <div formArrayName="addresses" *ngFor="let addres of addresses.controls, let i=index">
+            <div [formGroupName]='i'> [] - ponieważ robimy bind przez pętle
+        </div>
+
+        Ważne, żeby id elelemnów HTML były rozróżnione dzięki indeksowi i
+
+    f) Wywołanie duplikacji 
+       
+       addAddress(): void{
+           this.addresses.push(this.buildAddress());
+       }
+
+10 Routing do formy
+
+    Dodanie nowego elementu powinno być poprzez routing z pewnym ustalonym id np 0 lub -1
+        [routerLink]="['/produktEdit','0']"
+
+    Czyszczenie observabla zawierającego dane w edycji formy.
+        ngOnDestroy():void {
+            this.sub.unsubscribe();
+        }
+
+11) Wartownik GUARD deactivate
+
+    @Injectable()
+    export class ProductEditGuard implements CanDeactivate<ProductEditComponent>{
+        canDeactivate(component:ProductEditComponent):boolean{
+            if(component.productForm.dirty){
+                let productName = component.productForm.get('produktName').value || "New Product";
+                return confirm(`Navigate away and lose all changes to ${productName}?`);
+            }
+            return true;
+        }
+    }
+
+12) Zapisywanie danych (CRUD)
+
+    a) Definicja fake-servera MOCK
+        * import angular-in-memory-web-api
+        * w systemjs.config.js 
+                map: {
+                    ...
+                    'angular-in-memory-web-api':'npm angular-in-memory-web-api/bundless/in-memory-web-api.umd.js'
+                }
+        * w module
+            InMemoryWebApiModule.forRoot(ProductData) /gdzie w ProduktData jest metoda createDb(){
+                                                                                            let products:IProduct[] = [] //Musi być w każdym wpisie id     
+                                                                                    }
+        * wystarczy usunąć wpis w module, żeby przejść na odpytywanie back-end.
+        * jeżeli robimy POST na fake-server to id ustawiamy na undefined.
+
+13) Reset formy 
+    this.forma.reset();    
+
+14) Ustawienia danych z serwera
+
+    this.productForm.setControl('tags', this.fb.array(this.products.tags || [])) ;
+
+    Dane z modelu formy nie aktualizują danych w modelu danych, kiedy użytkownik coś zmieni, bo nie używamy two-way binding [(ngModel)]
+
+    Żeby zmienić dane robimy przed wysłaniem
+
+        let p = Object.assign({}, this.products, this.productsForm.value);
+
+15) Kiedy POST a kiedy PUT  
+
+    POST do inicjalizacji, kiedy nie ma ID obiektów
+    PUT przy edycji obiektu
+
+    kiedy zapiszemy już dane na serwerze warto zrobić
+
+        onSaveComplete(): void{
+            this.productForm.reset();
+            this.router.navigate(['gdzieindziej']);
+        }                                                                                       
